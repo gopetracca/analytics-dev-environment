@@ -3,9 +3,9 @@ version: "3.9"
 
 services:
   scala-docker-dev-env:
-    container_name: scala-docker-dev-env
+    container_name: analytics-dev-env-scala-$SCALA_VERSION-spark-$SPARK_VERSION-python-$PYTHON_VERSION
     # Will use this image name:tag when building
-    image: scala-docker-dev-env:latest
+    image: analytics-dev-env:scala-$SCALA_VERSION-spark-$SPARK_VERSION-python-$PYTHON_VERSION
     build:
       context: .
       target: dev
@@ -15,7 +15,6 @@ services:
         - PYTHON_VERSION=${PYTHON_VERSION}
         - SPARK_VERSION=${SPARK_VERSION}
         - HADOOP_VERSION=${HADOOP_VERSION}
-        - SPARK_URL=${SPARK_URL}
         - ALMOND_VERSION=${ALMOND_VERSION}
     env_file:
     - .env
