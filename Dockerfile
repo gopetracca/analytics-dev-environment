@@ -5,7 +5,6 @@ ARG PYTHON_VERSION
 
 ARG SPARK_VERSION
 ARG HADOOP_VERSION
-ARG SPARK_URL=https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz
 
 ARG ALMOND_VERSION
 
@@ -38,24 +37,32 @@ RUN apt-get update \
 FROM base as base-spark
 
 ARG SPARK_VERSION
-ARG SPARK_URL
 ARG SCALA_VERSION
+ARG HADOOP_VERSION
 ENV SPARK_HOME=/usr/spark
 ENV SPARK_CONF_DIR=/usr/spark/conf
 ENV PATH=$SPARK_HOME/bin:$PATH
 
+ARG SPARK_URL_2_12=https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz
+ARG SPARK_URL_2_13=https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}-scala${SCALA_VERSION}.tgz
+
 # Install Spark
 RUN \
-      wget -O spark_bin.tgz ${SPARK_URL} \
-      && tar -xvzf spark_bin.tgz \
-      && mv spark-* spark-${SPARK_VERSION} \
-      && mkdir -p $SPARK_HOME \
-      && mv spark-${SPARK_VERSION}/* $SPARK_HOME/ \
-      && rm spark_bin.tgz \
-      && rm -rf spark-${SPARK_VERSION} \
-      && mkdir -p ${WORKSPACE}/tmp/spark/logs \
-      && chmod 777 -R ${WORKSPACE} \
-      && jar cv0f $SPARK_HOME/spark-libs.jar -C $SPARK_HOME/jars/ .
+    if [ "$SCALA_VERSION" = "2.12" ]; then \
+      SPARK_URL=${SPARK_URL_2_12}; \
+    elif [ "$SCALA_VERSION" = "2.13" ]; then \
+      SPARK_URL=${SPARK_URL_2_13}; \
+    fi \
+    && wget -O spark_bin.tgz ${SPARK_URL} \
+    && tar -xvzf spark_bin.tgz \
+    && mv spark-* spark-${SPARK_VERSION} \
+    && mkdir -p $SPARK_HOME \
+    && mv spark-${SPARK_VERSION}/* $SPARK_HOME/ \
+    && rm spark_bin.tgz \
+    && rm -rf spark-${SPARK_VERSION} \
+    && mkdir -p ${WORKSPACE}/tmp/spark/logs \
+    && chmod 777 -R ${WORKSPACE} \
+    && jar cv0f $SPARK_HOME/spark-libs.jar -C $SPARK_HOME/jars/ .
 
 ENV SPARK_HISTORY_OPTS="$SPARK_HISTORY_OPTS -Dspark.history.fs.logDirectory=file://$WORKSPACE/tmp/spark/logs"
 
