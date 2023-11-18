@@ -151,7 +151,6 @@ RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
 
 # Install almond
 RUN ./cs launch --fork almond:${ALMOND_VERSION} --scala ${SCALA_VERSION} -- --install
-# RUN python3 -m spylon_kernel install --user
 WORKDIR ${WORKSPACE}
 
 CMD [ "sleep", "infinity" ]
