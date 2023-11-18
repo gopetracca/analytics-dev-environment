@@ -1,0 +1,7 @@
+pyspark==${SPARK_VERSION}
+numpy
+pandas
+ipython
+jupyterlab
+spylon-kernel
+boto3
