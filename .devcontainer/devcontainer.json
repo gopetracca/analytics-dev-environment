@@ -1,0 +1,25 @@
+{
+	"name": "scala-docker-dev-env",
+	"dockerComposeFile": [
+		"../docker-compose.dev.yml",
+	],
+	"service": "scala-docker-dev-env",
+	// In case you want to run more services from the compose file, add them.
+	"runServices": [],
+	"overrideCommand": true,
+	"workspaceFolder": "/app",
+	"shutdownAction": "stopCompose",
+	// Set *default* container specific settings.json values on container create.
+	"settings": {},
+	// Add the IDs of extensions you want installed when the container is created.
+	"extensions": [
+		"ms-python.python",
+		"eamodio.gitlens",
+		"donjayamanne.githistory",
+		"mhutchie.git-graph",
+		"GitHub.vscode-pull-request-github",
+		"scala-lang.scala",
+		"ms-toolsai.jupyter"
+	],
+	"remoteUser": "user"
+}
