@@ -1,0 +1,27 @@
+# See: https://docs.docker.com/compose/compose-file/compose-file-v3/
+version: "3.9"
+
+services:
+  scala-docker-dev-env:
+    container_name: scala-docker-dev-env
+    # Will use this image name:tag when building
+    image: scala-docker-dev-env:latest
+    build:
+      context: .
+      target: dev
+      args:
+        - JAVA_VERSION=${JAVA_VERSION}
+        - SCALA_VERSION=${SCALA_VERSION}
+        - PYTHON_VERSION=${PYTHON_VERSION}
+        - SPARK_VERSION=${SPARK_VERSION}
+        - HADOOP_VERSION=${HADOOP_VERSION}
+        - SPARK_URL=${SPARK_URL}
+        - ALMOND_VERSION=${ALMOND_VERSION}
+    env_file:
+    - .env
+    ports:
+      - 8888:8888
+    restart: always
+    volumes:
+      - .:/app:Z
+      - $HOME/.aws:/home/user/.aws:Z
